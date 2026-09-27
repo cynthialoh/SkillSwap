@@ -229,4 +229,18 @@ Paid sessions + commission, premium, promoted, community feed §18, advanced ver
 ---
 
 ## 4. What to do next
-Approve Table 1 → I scaffold Phase 0 on branch `chore/scaffold` (Next.js+Prisma+Clerk+CI+seed Chiaka/David).
+Build in order using `phases/` (one folder per phase, each with checkboxes):
+
+- `phases/phase-00-foundations.md` → Phase 0
+- `phases/phase-01-design-system.md` → Phase 1
+- `phases/phase-02-auth-profiles.md` → Phase 2
+- `phases/phase-03-browse-search.md` → Phase 3
+- `phases/phase-04-matching.md` → Phase 4
+- `phases/phase-05-exchange-flow.md` → Phase 5
+- `phases/phase-06-credits.md` → Phase 6
+- `phases/phase-07-trust-safety.md` → Phase 7
+- `phases/phase-08-admin.md` → Phase 8
+- `phases/phase-09-notifications-home.md` → Phase 9
+- `phases/phase-10-launch.md` → Phase 10
+
+Rule: finish all checkboxes in Phase N before starting N+1. Each phase ends with its Done-when test.
