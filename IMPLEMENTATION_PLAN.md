@@ -116,6 +116,8 @@ Done when: all screens clickable with fake data, no backend yet.
 
 ## 3. Build Phases (in order)
 
+Overview:
+
 | Phase | Name | Time | PRD | Done when |
 |---|---|---|---|---|
 | 0 | Foundations | 3 days | — | `pnpm dev` runs, DB connected, deploy preview live |
@@ -131,7 +133,98 @@ Done when: all screens clickable with fake data, no backend yet.
 | 10 | Harden + Launch beta | 1 week | §24 | 10 real pairs do 1h exchange, metrics live |
 | 11 | Later (not MVP) | — | §13,§18,§20 | Paid, premium, feed, business |
 
-Details per phase in previous version — ask if you want any phase expanded to daily tasks.
+---
+
+### Phase 0 — Foundations (3 days)
+| Item | Detail |
+|---|---|
+| Goal | Running app + DB + deploy |
+| Build | Next.js+TS+Tailwind+shadcn, Prisma+Postgres, Clerk, Sentry/PostHog, GitHub Actions, seed categories + Chiaka/David |
+| PRD | — |
+| Done when | `pnpm dev` works, `/health` 200, Vercel preview live |
+
+### Phase 1 — Design System + Prototype (1 week)
+| Item | Detail |
+|---|---|
+| Goal | Look + click before code |
+| Build | Tokens, 15 components (§2 tables), 11 screens: Member Home, Browse, Match, Request, Chat, Schedule, Credits, Profile, Admin Dashboard, Verification queue, Report queue |
+| PRD | §14, §17 |
+| Done when | Click Home→Match→Request→Chat→Schedule on 360px + 1280px, Axe pass |
+
+### Phase 2 — Auth + Profiles + Onboarding (1 week)
+| Item | Detail |
+|---|---|
+| Goal | 2 roles work |
+| Build | Member signup → Teach/Learn picker → Skill Profile. Explore-before-signup read-only. Admin invite-only + `/admin` guard + audit. APIs: `POST /api/profile, /api/teach, /api/learn`, `GET /api/me` |
+| PRD | §4, §5, §6, §14 |
+| Done when | New member Teach=Excel Learn=Photo saved; non-admin gets 403 on `/admin` |
+
+### Phase 3 — Categories + Browse/Search (3 days)
+| Item | Detail |
+|---|---|
+| Goal | Find people without matching |
+| Build | Admin category CRUD, Postgres full-text search, filters: skill, mode, location, rating |
+| PRD | §7, §9 |
+| Done when | "photography" finds Sarah; in-person filter works |
+
+### Phase 4 — Smart Matching (4 days)
+| Item | Detail |
+|---|---|
+| Goal | Proactive recommendations |
+| Build | Scoring Table 5 + `MatchCache` + `GET /api/matches` + MatchCard with reason chips |
+| PRD | §8 |
+| Done when | Chiaka (Sales→Photo) sees David (Photo→Sales) top with breakdown |
+
+### Phase 5 — Exchange Flow: Request→Chat→Schedule (1.5 weeks)
+| Item | Detail |
+|---|---|
+| Goal | Core loop works |
+| Build | SwapRequest state machine (pending→accepted→scheduled→completed), chat (polling→Realtime), sessions with timezone + reminders, online/in-person/either |
+| PRD | §10, §16 |
+| Done when | E2E Discover→Request→Accept→Chat→Schedule→Complete green |
+
+### Phase 6 — Credits (3 days)
+| Item | Detail |
+|---|---|
+| Goal | Currency works, no cheating |
+| Build | Immutable ledger, balance pill, direct (0 credits) vs credit toggle, settlement on complete, admin adjust with reason |
+| PRD | §11, §12 |
+| Done when | +2 taught / -2 learned, insufficient blocks credit swap |
+
+### Phase 7 — Reviews + Verification + Safety (3 days)
+| Item | Detail |
+|---|---|
+| Goal | Trust |
+| Build | Dual review once per session, avg rating, TrustBadgeRow, ID upload → admin approve, Report/Block |
+| PRD | §14, §15 |
+| Done when | Reviewed once, blocked cannot message, badge visible |
+
+### Phase 8 — Admin MVP (1 week)
+| Item | Detail |
+|---|---|
+| Goal | Operate platform |
+| Build | Dashboard (verifications, reports, growth, credits, flagged), queues: suspend/ban, approve, resolve, category CRUD, ledger view+adjust, metrics |
+| PRD | §15b, §17b |
+| Done when | Report→suspend writes audit; credit fix shows adminId |
+
+### Phase 9 — Notifications + Personalized Home (3 days)
+| Item | Detail |
+|---|---|
+| Goal | Users return |
+| Build | Member: match, request, accepted, message, reminder, credit, review. Admin: verification, report, dispute. Bell + email (Resend) + PWA push. Home: Matches, Learn New, Want Your Skills, Credits, Upcoming, Explore |
+| PRD | §17a, §19 |
+| Done when | Request triggers bell+email <60s, mark-read works |
+
+### Phase 10 — Harden + Launch Beta (1 week)
+| Item | Detail |
+|---|---|
+| Goal | Safe launch |
+| Build | Rate limits, PII redaction, backups, cron load test, §24 dashboard (users, swaps, repeat, credits, retention, avg/user, ratings, verified) |
+| PRD | §24 |
+| Done when | 10 real pairs complete 1h, north-star tracked, 0 P0 |
+
+### Phase 11 — Post-MVP (Later, per PRD)
+Paid sessions + commission, premium, promoted, community feed §18, advanced verification, business accounts, partnerships, ML matching.
 
 ---
 
