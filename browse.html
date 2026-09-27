@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SkillSwap — Browse</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={theme:{extend:{colors:{trust:'#2563EB',teal2:'#0D9488',ink:'#0F172A',muted:'#F8FAFC'},borderRadius:{card:'12px'}}}}</script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>body{font-family:Inter,system-ui,sans-serif}</style>
+</head>
+<body class="bg-muted text-ink">
+<header class="bg-white shadow-sm"><div class="max-w-5xl mx-auto px-4 py-3 flex justify-between">
+<a href="index.html" class="font-bold">🔄 SkillSwap</a>
+<nav class="flex gap-3 text-sm"><a href="index.html">Home</a><a href="browse.html">Browse</a><a href="match.html">Matches</a><a href="profile.html">Profile</a><a href="admin.html">Admin</a></nav>
+</div></header>
+<main class="max-w-5xl mx-auto px-4 py-6 space-y-4">
+<h1 class="text-xl font-semibold">Browse skills & people</h1>
+<input placeholder="Search photography, Excel, cooking…" class="w-full bg-white shadow rounded-card px-4 py-3" />
+<div class="flex gap-2 text-sm">
+<span class="bg-white shadow px-3 py-1 rounded-full">Online</span>
+<span class="bg-white shadow px-3 py-1 rounded-full">In-person</span>
+<span class="bg-white shadow px-3 py-1 rounded-full">⭐ 4.5+</span>
+<span class="bg-white shadow px-3 py-1 rounded-full">✓ Verified</span>
+</div>
+<div class="grid md:grid-cols-3 gap-4">
+<div class="bg-white rounded-card shadow p-4"><p class="font-medium">Sarah — Photography</p><p class="text-sm text-gray-500">⭐ 4.9 · ✓ Verified · Online</p><a href="match.html" class="text-trust text-sm">View →</a></div>
+<div class="bg-white rounded-card shadow p-4"><p class="font-medium">John — Excel</p><p class="text-sm text-gray-500">⭐ 4.7 · Online + In-person</p><a href="match.html" class="text-trust text-sm">View →</a></div>
+<div class="bg-white rounded-card shadow p-4"><p class="font-medium">Amara — Cooking</p><p class="text-sm text-gray-500">⭐ 4.8 · ✓ Verified</p><a href="match.html" class="text-trust text-sm">View →</a></div>
+</div>
+</main></body></html>

@@ -1,10 +1,99 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>SkillSwap</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SkillSwap — Home</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: { extend: {
+    colors: { trust:'#2563EB', teal2:'#0D9488', amber2:'#F59E0B', ink:'#0F172A', muted:'#F8FAFC' },
+    borderRadius: { card:'12px' }
+  } }
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>body{font-family:Inter,system-ui,sans-serif}</style>
 </head>
-<body>
-    <h1>Welcome to SkillSwap!</h1>
-    <p>Your website is working.</p>
+<body class="bg-muted text-ink">
+<header class="bg-white shadow-sm sticky top-0 z-10">
+  <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+    <a href="index.html" class="font-bold text-lg">🔄 SkillSwap</a>
+    <nav class="flex gap-3 text-sm">
+      <a class="hover:text-trust" href="index.html">Home</a>
+      <a class="hover:text-trust" href="browse.html">Browse</a>
+      <a class="hover:text-trust" href="match.html">Matches</a>
+      <a class="hover:text-trust" href="credits.html">🪙 14</a>
+      <a class="hover:text-trust" href="profile.html">Profile</a>
+      <a class="hover:text-trust" href="admin.html">Admin</a>
+    </nav>
+  </div>
+</header>
+
+<main class="max-w-5xl mx-auto px-4 py-6 space-y-6">
+  <h1 class="text-2xl font-semibold">Good morning, Chiaka 👋</h1>
+
+  <!-- Credits + upcoming -->
+  <div class="grid md:grid-cols-2 gap-4">
+    <div class="bg-white rounded-card shadow p-4">
+      <p class="text-sm text-gray-500">Your Skill Credits</p>
+      <p class="text-3xl font-bold">🪙 14</p>
+      <p class="text-sm text-gray-500">Taught 18h · Learned 11h · 23 exchanges</p>
+      <a href="credits.html" class="text-trust text-sm">View history →</a>
+    </div>
+    <div class="bg-white rounded-card shadow p-4">
+      <p class="text-sm text-gray-500">Upcoming exchange</p>
+      <p class="font-medium">Photography with David · Fri 5:00 PM · Online</p>
+      <a href="schedule.html" class="text-trust text-sm">Open schedule →</a>
+    </div>
+  </div>
+
+  <!-- Matches -->
+  <section>
+    <div class="flex items-center justify-between mb-2">
+      <h2 class="font-semibold text-lg">🎯 Your Matches</h2>
+      <a href="match.html" class="text-trust text-sm">See all →</a>
+    </div>
+    <div class="bg-white rounded-card shadow p-4 flex items-center gap-4">
+      <div class="w-12 h-12 rounded-full bg-teal2 text-white flex items-center justify-center font-bold">D</div>
+      <div class="flex-1">
+        <p class="font-medium">David — Photography ↔ Sales</p>
+        <p class="text-sm text-gray-500">Mutual match · Online · ⭐ 4.9 · ✓ Verified</p>
+        <div class="flex gap-2 mt-1 text-xs">
+          <span class="bg-blue-100 text-trust px-2 py-1 rounded-full">I teach: Sales</span>
+          <span class="bg-teal-100 text-teal2 px-2 py-1 rounded-full">I learn: Photography</span>
+        </div>
+      </div>
+      <a href="request.html" class="bg-trust text-white px-4 py-2 rounded-full text-sm">Request SkillSwap</a>
+    </div>
+  </section>
+
+  <!-- Want your skills -->
+  <section>
+    <h2 class="font-semibold text-lg mb-2">💡 People who want your skills</h2>
+    <div class="grid md:grid-cols-3 gap-4">
+      <div class="bg-white rounded-card shadow p-4"><p class="font-medium">Amara wants Sales</p><p class="text-sm text-gray-500">Beginner · Lagos · In-person</p></div>
+      <div class="bg-white rounded-card shadow p-4"><p class="font-medium">John wants Canva</p><p class="text-sm text-gray-500">Student · Online</p></div>
+      <div class="bg-white rounded-card shadow p-4"><p class="font-medium">Sarah wants Cooking</p><p class="text-sm text-gray-500">Hobbyist · Online</p></div>
+    </div>
+  </section>
+
+  <!-- Explore -->
+  <section>
+    <div class="flex items-center justify-between mb-2">
+      <h2 class="font-semibold text-lg">🔎 Explore skills</h2>
+      <a href="browse.html" class="text-trust text-sm">Browse all →</a>
+    </div>
+    <div class="flex flex-wrap gap-2 text-sm">
+      <a href="browse.html" class="bg-white shadow px-3 py-2 rounded-full">📸 Photography</a>
+      <a href="browse.html" class="bg-white shadow px-3 py-2 rounded-full">📊 Excel</a>
+      <a href="browse.html" class="bg-white shadow px-3 py-2 rounded-full">🍳 Cooking</a>
+      <a href="browse.html" class="bg-white shadow px-3 py-2 rounded-full">💻 Coding</a>
+      <a href="browse.html" class="bg-white shadow px-3 py-2 rounded-full">🎨 Design</a>
+    </div>
+  </section>
+</main>
 </body>
 </html>

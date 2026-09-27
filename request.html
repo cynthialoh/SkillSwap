@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SkillSwap — Request</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={theme:{extend:{colors:{trust:'#2563EB',teal2:'#0D9488',ink:'#0F172A',muted:'#F8FAFC'},borderRadius:{card:'12px'}}}}</script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>body{font-family:Inter,system-ui,sans-serif}</style>
+</head>
+<body class="bg-muted text-ink">
+<header class="bg-white shadow-sm"><div class="max-w-3xl mx-auto px-4 py-3 flex justify-between">
+<a href="index.html" class="font-bold">🔄 SkillSwap</a>
+<nav class="flex gap-3 text-sm"><a href="index.html">Home</a><a href="match.html">Matches</a><a href="chat.html">Chat</a></nav>
+</div></header>
+<main class="max-w-3xl mx-auto px-4 py-6 space-y-4">
+<h1 class="text-xl font-semibold">Request SkillSwap with David</h1>
+<div class="bg-white rounded-card shadow p-4 text-sm">Discover ✓ → <b>Request</b> → Chat → Agree → Schedule → Exchange → Review</div>
+<div class="bg-white rounded-card shadow p-4 space-y-3">
+<label class="block text-sm">Exchange type
+<select class="w-full border rounded-card px-3 py-2 mt-1"><option>Direct swap (Skill ↔ Skill, 0 credits)</option><option>Credit swap (1 credit / hour)</option></select></label>
+<label class="block text-sm">You teach David<input value="Sales — 1 hour" class="w-full border rounded-card px-3 py-2 mt-1" /></label>
+<label class="block text-sm">David teaches you<input value="Photography — 1 hour" class="w-full border rounded-card px-3 py-2 mt-1" /></label>
+<a href="chat.html" class="inline-block bg-trust text-white px-5 py-2 rounded-full text-sm">Send request →</a>
+</div>
+</main></body></html>

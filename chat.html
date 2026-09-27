@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SkillSwap — Chat</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={theme:{extend:{colors:{trust:'#2563EB',teal2:'#0D9488',ink:'#0F172A',muted:'#F8FAFC'},borderRadius:{card:'12px'}}}}</script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>body{font-family:Inter,system-ui,sans-serif}</style>
+</head>
+<body class="bg-muted text-ink">
+<header class="bg-white shadow-sm"><div class="max-w-3xl mx-auto px-4 py-3 flex justify-between">
+<a href="index.html" class="font-bold">🔄 SkillSwap</a>
+<nav class="flex gap-3 text-sm"><a href="request.html">Request</a><a href="chat.html">Chat</a><a href="schedule.html">Schedule</a></nav>
+</div></header>
+<main class="max-w-3xl mx-auto px-4 py-6 space-y-3">
+<h1 class="text-xl font-semibold">Chat with David</h1>
+<div class="bg-white rounded-card shadow p-4 space-y-2 text-sm">
+<p class="bg-gray-100 rounded-card px-3 py-2 w-fit">Hi Chiaka! Happy to swap Photography for Sales 🙌</p>
+<p class="bg-blue-100 rounded-card px-3 py-2 w-fit ml-auto">Great! 1 hour each? Online Friday?</p>
+<p class="bg-gray-100 rounded-card px-3 py-2 w-fit">Perfect. Friday 5pm works.</p>
+</div>
+<div class="flex gap-2"><input placeholder="Type a message…" class="flex-1 bg-white shadow rounded-full px-4 py-2" /><a href="schedule.html" class="bg-trust text-white px-4 py-2 rounded-full text-sm">Agree → Schedule</a></div>
+</main></body></html>

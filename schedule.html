@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SkillSwap — Schedule</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={theme:{extend:{colors:{trust:'#2563EB',teal2:'#0D9488',ink:'#0F172A',muted:'#F8FAFC'},borderRadius:{card:'12px'}}}}</script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>body{font-family:Inter,system-ui,sans-serif}</style>
+</head>
+<body class="bg-muted text-ink">
+<header class="bg-white shadow-sm"><div class="max-w-3xl mx-auto px-4 py-3 flex justify-between">
+<a href="index.html" class="font-bold">🔄 SkillSwap</a>
+<nav class="flex gap-3 text-sm"><a href="chat.html">Chat</a><a href="schedule.html">Schedule</a><a href="credits.html">Credits</a></nav>
+</div></header>
+<main class="max-w-3xl mx-auto px-4 py-6 space-y-4">
+<h1 class="text-xl font-semibold">Schedule exchange</h1>
+<div class="bg-white rounded-card shadow p-4 space-y-3 text-sm">
+<label class="block">Date<input type="date" value="2026-10-03" class="w-full border rounded-card px-3 py-2 mt-1" /></label>
+<label class="block">Time<input type="time" value="17:00" class="w-full border rounded-card px-3 py-2 mt-1" /></label>
+<label class="block">Mode<select class="w-full border rounded-card px-3 py-2 mt-1"><option>Online</option><option>In-person</option><option>Either</option></select></label>
+<p>Chiaka teaches Sales 5:00–6:00 PM → David teaches Photography 6:00–7:00 PM</p>
+<a href="credits.html" class="inline-block bg-trust text-white px-5 py-2 rounded-full">Confirm → Credits</a>
+</div>
+</main></body></html>
