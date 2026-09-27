@@ -5,7 +5,7 @@ PRD: §10, §16
 
 ## Tasks
 - [ ] SwapRequest state machine: pending→accepted/declined→scheduled→completed/cancelled
-- [ ] Chat: Conversation + Message, polling first → Realtime
+- [ ] Chat: Conversation + Message with Convex realtime (live, no refresh)
 - [ ] Sessions: timezone picker, online/in-person/either, reminders
 - [ ] RequestTimeline UI (Discover→Review)
 - [ ] Playwright e2e: Discover→Request→Accept→Chat→Schedule→Complete

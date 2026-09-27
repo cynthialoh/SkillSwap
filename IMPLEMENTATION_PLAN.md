@@ -17,16 +17,16 @@
 |---|---|---|---|
 | Website framework | Next.js 14 + TypeScript | One repo for Members + Admin, easy to deploy, one language | React+Vite + separate backend = too much work for beginner |
 | Language | TypeScript | Catches errors early | JavaScript alone = more bugs |
-| Styling | Tailwind CSS + shadcn/ui | Fast, clean, ready components | Plain CSS = slow |
+| Styling | Tailwind CSS | Your choice — fast utility styling | Plain CSS = slow |
 | Backend | Next.js API routes (same repo) | No second server to manage | Express separate server = extra hosting |
-| Database | PostgreSQL (Neon/Supabase) + Prisma | Safe for money-like credits, easy tables | Firebase = weak for credits/audit |
+| Database | PostgreSQL (local) + Prisma | Your choice — runs on your device, safe for credits | Cloud DB = costs + internet needed |
 | Login/Auth | Clerk | Login, Google OAuth, roles out of box | Build own passwords = unsafe |
 | Roles | `member` vs `admin` in login token | Admin pages blocked server-side | Client-only check = hackable |
-| Hosting | Vercel | Push to GitHub = auto live link, free preview per change | Manual VPS = hard |
-| Chat realtime | Supabase Realtime (start with refresh, upgrade later) | Simple, works with Postgres | Pusher = extra cost |
-| File uploads | Supabase Storage (avatars, ID docs) | Same account as DB | AWS S3 direct = harder setup |
-| Testing | Vitest + Playwright | Unit + click-through test | No tests = break credits |
-| Tracking | PostHog + Sentry | See what users do + catch crashes | No tracking = blind |
+| Hosting | Local device (your PC) | Your choice — run with Node/Docker, open `http://localhost:3000`, no cloud needed | Vercel/cloud = not wanted |
+| Chat realtime | Convex | Your choice — live messages without refresh | Manual refresh = slow |
+| File uploads | Local disk (`uploads/` folder) | Works offline with local hosting | Cloud storage = not needed |
+| Testing | Playwright | Your choice — auto clicks through app like a user | Manual clicking = misses bugs |
+| Tracking | PostHog | Your choice — see what users do | No tracking = blind |
 
 ### Table 2 — Where code lives
 
@@ -120,7 +120,7 @@ Overview:
 
 | Phase | Name | Time | PRD | Done when |
 |---|---|---|---|---|
-| 0 | Foundations | 3 days | — | `pnpm dev` runs, DB connected, deploy preview live |
+| 0 | Foundations | 3 days | — | `pnpm dev` runs, local Postgres connected, app opens on `http://localhost:3000` |
 | 1 | Design System + Prototype | 1 week | §14, §17 | 11 screens clickable mobile+desktop |
 | 2 | Auth + Profiles + Onboarding | 1 week | §4,§5,§6,§14 | Member creates Teach=Excel/Learn=Photo; non-admin blocked from /admin |
 | 3 | Categories + Browse/Search | 3 days | §7,§9 | Search "photo" finds Sarah |
@@ -138,10 +138,10 @@ Overview:
 ### Phase 0 — Foundations (3 days)
 | Item | Detail |
 |---|---|
-| Goal | Running app + DB + deploy |
-| Build | Next.js+TS+Tailwind+shadcn, Prisma+Postgres, Clerk, Sentry/PostHog, GitHub Actions, seed categories + Chiaka/David |
+| Goal | Running app + local DB on your device |
+| Build | Next.js+TS+Tailwind, Prisma+local PostgreSQL, Clerk, PostHog, Convex for chat, Playwright tests, GitHub Actions (lint, typecheck), seed categories + Chiaka/David |
 | PRD | — |
-| Done when | `pnpm dev` works, `/health` 200, Vercel preview live |
+| Done when | `pnpm dev` works, `/health` 200, opens on `http://localhost:3000` (local hosting, no cloud) |
 
 ### Phase 1 — Design System + Prototype (1 week)
 | Item | Detail |
@@ -179,7 +179,7 @@ Overview:
 | Item | Detail |
 |---|---|
 | Goal | Core loop works |
-| Build | SwapRequest state machine (pending→accepted→scheduled→completed), chat (polling→Realtime), sessions with timezone + reminders, online/in-person/either |
+| Build | SwapRequest state machine (pending→accepted→scheduled→completed), chat with Convex realtime, sessions with timezone + reminders, online/in-person/either |
 | PRD | §10, §16 |
 | Done when | E2E Discover→Request→Accept→Chat→Schedule→Complete green |
 
@@ -219,7 +219,7 @@ Overview:
 | Item | Detail |
 |---|---|
 | Goal | Safe launch |
-| Build | Rate limits, PII redaction, backups, cron load test, §24 dashboard (users, swaps, repeat, credits, retention, avg/user, ratings, verified) |
+| Build | Rate limits, PII redaction, local backups, Playwright tests, PostHog §24 dashboard (users, swaps, repeat, credits, retention, avg/user, ratings, verified) |
 | PRD | §24 |
 | Done when | 10 real pairs complete 1h, north-star tracked, 0 P0 |
 
