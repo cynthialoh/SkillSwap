@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SkillSwap — Design System (Phase 1)</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={theme:{extend:{colors:{trust:'#2563EB',teal2:'#0D9488',amber2:'#F59E0B',ink:'#0F172A',muted:'#F8FAFC'},borderRadius:{card:'12px'}}}}</script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>body{font-family:Inter,system-ui,sans-serif}:root{--trust:#2563EB;--teal:#0D9488;--amber:#F59E0B;--ink:#0F172A;--muted:#F8FAFC;--radius:12px}</style>
+</head>
+<body class="bg-muted text-ink">
+<header class="bg-white shadow-sm"><div class="max-w-5xl mx-auto px-4 py-3 flex justify-between">
+<a href="index.html" class="font-bold">🔄 SkillSwap</a>
+<nav class="flex gap-3 text-sm"><a href="index.html">Home</a><a href="design-system.html">Design System</a><a href="admin.html">Admin</a></nav>
+</div></header>
+<main class="max-w-5xl mx-auto px-4 py-6 space-y-6">
+<h1 class="text-xl font-semibold">Phase 1 — Design System</h1>
+
+<section class="bg-white rounded-card shadow p-4">
+<h2 class="font-medium mb-2">Tokens</h2>
+<div class="flex flex-wrap gap-2 text-sm">
+<span class="px-3 py-2 rounded-full text-white" style="background:#2563EB">Trust Blue #2563EB</span>
+<span class="px-3 py-2 rounded-full text-white" style="background:#0D9488">Teal #0D9488</span>
+<span class="px-3 py-2 rounded-full" style="background:#F59E0B">Amber #F59E0B</span>
+<span class="px-3 py-2 rounded-full bg-ink text-white">Ink #0F172A</span>
+<span class="px-3 py-2 rounded-full border">Radius 12px · Inter 12/14/16/20/24/32</span>
+</div>
+</section>
+
+<section class="bg-white rounded-card shadow p-4 space-y-3">
+<h2 class="font-medium">Components</h2>
+<div class="flex flex-wrap gap-2 text-sm">
+<button class="bg-trust text-white px-4 py-2 rounded-full">Primary button</button>
+<button class="bg-white shadow px-4 py-2 rounded-full">Secondary</button>
+<span class="bg-blue-100 text-trust px-2 py-1 rounded-full">SkillBadge: Excel</span>
+<span class="bg-teal-100 px-2 py-1 rounded-full" style="color:#0D9488">SkillBadge: Photography</span>
+<span class="font-bold">🪙 CreditPill: 14</span>
+<span class="text-sm">✓ Identity Verified · ✓ Skill Verified · ⭐ 4.8 · 🔄 23</span>
+</div>
+<div class="bg-white border rounded-card p-4 flex items-center gap-4">
+<div class="w-12 h-12 rounded-full text-white flex items-center justify-center font-bold" style="background:#0D9488">D</div>
+<div class="flex-1"><p class="font-medium">MatchCard: David — Photography ↔ Sales</p><p class="text-sm text-gray-500">Mutual 40 + online 10 + rating 10 + verified 10 = 70</p></div>
+<a href="match.html" class="text-sm px-4 py-2 rounded-full text-white" style="background:#2563EB">Request</a>
+</div>
+</section>
+
+<section class="bg-white rounded-card shadow p-4 text-sm">
+<h2 class="font-medium mb-2">Screens (11)</h2>
+<ol class="list-decimal ml-5 space-y-1">
+<li><a class="text-trust" href="index.html">Member Home</a></li>
+<li><a class="text-trust" href="browse.html">Browse</a></li>
+<li><a class="text-trust" href="match.html">Match detail</a></li>
+<li><a class="text-trust" href="request.html">Request flow</a></li>
+<li><a class="text-trust" href="chat.html">Chat</a></li>
+<li><a class="text-trust" href="schedule.html">Schedule</a></li>
+<li><a class="text-trust" href="credits.html">Credits</a></li>
+<li><a class="text-trust" href="profile.html">Profile</a></li>
+<li><a class="text-trust" href="admin.html">Admin dashboard</a></li>
+<li><a class="text-trust" href="admin.html">Verification queue (inside Admin)</a></li>
+<li><a class="text-trust" href="admin.html">Report queue (inside Admin)</a></li>
+</ol>
+<p class="mt-2 text-gray-500">Responsive: mobile 360px (single column) → desktop 1280px (grids). Mock data only, no backend.</p>
+</section>
+</main></body></html>
