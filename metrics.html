@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SkillSwap — Launch Metrics (Phase 10)</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={theme:{extend:{colors:{trust:'#2563EB',teal2:'#0D9488',ink:'#0F172A',muted:'#F8FAFC'},borderRadius:{card:'12px'}}}}</script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>body{font-family:Inter,system-ui,sans-serif}.bar{height:8px;border-radius:99px;background:#E2E8F0}.bar>i{display:block;height:8px;border-radius:99px;background:#2563EB}</style>
+</head>
+<body class="bg-muted text-ink">
+<header class="bg-white shadow-sm"><div class="max-w-5xl mx-auto px-4 py-3 flex justify-between">
+<a href="index.html" class="font-bold">🔄 SkillSwap</a>
+<nav class="flex gap-3 text-sm"><a href="admin.html">Admin</a><a href="index.html">Member view</a></nav>
+</div></header>
+<main class="max-w-5xl mx-auto px-4 py-6 space-y-4">
+<h1 class="text-xl font-semibold">North star: <span class="text-trust">312 completed exchanges</span></h1>
+<p class="text-sm text-gray-500">PRD §24 — mock numbers. Real PostHog dashboard in backend build.</p>
+<div class="grid md:grid-cols-4 gap-4 text-sm" id="metrics"></div>
+<div class="bg-white rounded-card shadow p-4">
+<p class="font-medium text-sm mb-2">Beta launch checklist (tick as you test with 10 real pairs)</p>
+<div id="uat" class="space-y-1 text-sm"></div>
+<p id="score" class="text-sm mt-2 font-medium"></p>
+</div>
+</main>
+<script>
+const M=[['Registered users','1,240',80],['Completed swaps','312',62],['Repeat exchanges','41%',41],['Credits earned / used','980 / 940',90],['Paid sessions','— (post-MVP)',0],['Active users','860',70],['Retention D30','38%',38],['Avg exchanges / user','2.6',52],['Reviews avg','4.8',90],['Verified users','410',33]];
+document.getElementById('metrics').innerHTML=M.map(m=>`<div class="bg-white rounded-card shadow p-4"><p class="text-gray-500">${m[0]}</p><p class="text-2xl font-bold">${m[1]}</p><div class="bar mt-2"><i style="width:${m[2]}%"></i></div></div>`).join('');
+let U=JSON.parse(localStorage.getItem('ss_uat')||'null')||['Signup + Teach/Learn saved','Match found with reason','Request sent + accepted','Chat exchanged','Session scheduled','Exchange completed','Credits settled','Review left','Report/block tested','Admin resolved queue'].map(t=>({t,d:0}));
+function render(){
+  document.getElementById('uat').innerHTML=U.map((u,i)=>`<label class="flex gap-2 items-center"><input type="checkbox" ${u.d?'checked':''} onchange="tg(${i})" /> ${u.t}</label>`).join('');
+  const d=U.filter(u=>u.d).length;
+  document.getElementById('score').textContent=d+'/10 beta checks done'+(d===10?' — ready to launch! 🎉':'');
+  localStorage.setItem('ss_uat',JSON.stringify(U));
+}
+window.tg=i=>{U[i].d=!U[i].d;render();};
+render();
+</script>
+</body>
+</html>
