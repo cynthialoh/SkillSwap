@@ -1,0 +1,221 @@
+// SkillSwap — Prisma schema (Phase 0 backend)
+// DB: local PostgreSQL. Set DATABASE_URL in .env, then: npx prisma migrate dev
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  member
+  admin
+}
+
+enum SwapType {
+  direct
+  credit
+}
+
+enum RequestStatus {
+  pending
+  accepted
+  declined
+  cancelled
+  scheduled
+  completed
+}
+
+enum SessionStatus {
+  scheduled
+  completed
+  no_show
+  cancelled
+}
+
+enum Mode {
+  online
+  inperson
+  either
+}
+
+model User {
+  id             String   @id @default(cuid())
+  role           Role     @default(member)
+  name           String
+  bio            String?
+  avatar         String?
+  location       String?
+  availability   Json?
+  mode           Mode     @default(either)
+  identityStatus String   @default("unverified")
+  createdAt      DateTime @default(now())
+
+  teaches      UserTeach[]
+  learns       UserLearn[]
+  sentRequests SwapRequest[] @relation("SentRequests")
+  gotRequests  SwapRequest[] @relation("GotRequests")
+  messages     Message[]
+  ledger       CreditLedger[]
+  reviewsGiven Review[]      @relation("ReviewsGiven")
+  reviewsGot   Review[]      @relation("ReviewsGot")
+  reportsMade  Report[]      @relation("ReportsMade")
+  reportsGot   Report[]      @relation("ReportsGot")
+}
+
+model Category {
+  id     String  @id @default(cuid())
+  name   String  @unique
+  icon   String?
+  skills Skill[]
+}
+
+model Skill {
+  id         String     @id @default(cuid())
+  name       String     @unique
+  categoryId String
+  category   Category   @relation(fields: [categoryId], references: [id])
+  taughtBy   UserTeach[]
+  learnedBy  UserLearn[]
+}
+
+model UserTeach {
+  userId  String
+  skillId String
+  level   String?
+  mode    Mode    @default(either)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  skill   Skill   @relation(fields: [skillId], references: [id], onDelete: Cascade)
+
+  @@id([userId, skillId])
+}
+
+model UserLearn {
+  userId  String
+  skillId String
+  mode    Mode   @default(either)
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  skill   Skill  @relation(fields: [skillId], references: [id], onDelete: Cascade)
+
+  @@id([userId, skillId])
+}
+
+model SwapRequest {
+  id             String        @id @default(cuid())
+  fromId         String
+  toId           String
+  type           SwapType      @default(direct)
+  offeredSkill   String
+  requestedSkill String
+  hours          Int           @default(1)
+  status         RequestStatus @default(pending)
+  createdAt      DateTime      @default(now())
+
+  from         User          @relation("SentRequests", fields: [fromId], references: [id])
+  to           User          @relation("GotRequests", fields: [toId], references: [id])
+  conversation Conversation?
+  sessions     Session[]
+}
+
+model Conversation {
+  id        String      @id @default(cuid())
+  requestId String      @unique
+  request   SwapRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  messages  Message[]
+}
+
+model Message {
+  id             String       @id @default(cuid())
+  conversationId String
+  senderId       String
+  body           String
+  createdAt      DateTime     @default(now())
+
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  sender       User         @relation(fields: [senderId], references: [id])
+}
+
+model Session {
+  id        String        @id @default(cuid())
+  requestId String
+  startsAt  DateTime
+  endsAt    DateTime
+  mode      Mode          @default(online)
+  status    SessionStatus @default(scheduled)
+
+  request SwapRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  reviews Review[]
+  credits CreditLedger[]
+}
+
+// Immutable ledger: balance = SUM(delta). Never update/delete, only add.
+model CreditLedger {
+  id        String   @id @default(cuid())
+  userId    String
+  delta     Int
+  reason    String
+  sessionId String?
+  adminId   String?
+  createdAt DateTime @default(now())
+
+  user    User     @relation(fields: [userId], references: [id])
+  session Session? @relation(fields: [sessionId], references: [id])
+}
+
+model Review {
+  id         String   @id @default(cuid())
+  sessionId  String
+  reviewerId String
+  revieweeId String
+  rating     Int
+  text       String?
+  createdAt  DateTime @default(now())
+
+  session  Session @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  reviewer User    @relation("ReviewsGiven", fields: [reviewerId], references: [id])
+  reviewee User    @relation("ReviewsGot", fields: [revieweeId], references: [id])
+
+  @@unique([sessionId, reviewerId])
+}
+
+model Verification {
+  id              String   @id @default(cuid())
+  userId          String
+  type            String
+  evidenceUrl     String?
+  status          String   @default("pending")
+  reviewerAdminId String?
+  createdAt       DateTime @default(now())
+}
+
+model Report {
+  id             String   @id @default(cuid())
+  reporterId     String
+  reportedId     String
+  reason         String
+  status         String   @default("open")
+  resolverAdminId String?
+  createdAt      DateTime @default(now())
+
+  reporter User @relation("ReportsMade", fields: [reporterId], references: [id])
+  reported User @relation("ReportsGot", fields: [reportedId], references: [id])
+}
+
+model Notification {
+  id        String    @id @default(cuid())
+  userId    String
+  type      String
+  payload   Json?
+  readAt    DateTime?
+  createdAt DateTime  @default(now())
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  adminId   String
+  action    String
+  target    String?
+  meta      Json?
+  createdAt DateTime @default(now())
+}
