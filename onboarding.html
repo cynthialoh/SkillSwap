@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SkillSwap — Join (Phase 2)</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={theme:{extend:{colors:{trust:'#2563EB',teal2:'#0D9488',ink:'#0F172A',muted:'#F8FAFC'},borderRadius:{card:'12px'}}}}</script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>body{font-family:Inter,system-ui,sans-serif}.chip{cursor:pointer}.chip.on{background:#2563EB;color:#fff}</style>
+</head>
+<body class="bg-muted text-ink">
+<header class="bg-white shadow-sm"><div class="max-w-3xl mx-auto px-4 py-3 flex justify-between">
+<a href="index.html" class="font-bold">🔄 SkillSwap</a>
+<nav class="flex gap-3 text-sm"><a href="index.html">Home</a><a href="browse.html">Explore without signup</a><a href="profile.html">Profile</a></nav>
+</div></header>
+<main class="max-w-3xl mx-auto px-4 py-6 space-y-4">
+<h1 class="text-xl font-semibold">Join SkillSwap</h1>
+<p class="text-sm text-gray-500">Prototype only — real Clerk login + database come with Phase 0 installs (Node/Postgres). Choices save in this browser.</p>
+
+<div class="bg-white rounded-card shadow p-4 space-y-3">
+<h2 class="font-medium">1. Account (pick a demo role)</h2>
+<div class="flex gap-2 text-sm">
+<button id="roleMember" class="chip on bg-gray-100 px-4 py-2 rounded-full">Member</button>
+<button id="roleAdmin" class="chip bg-gray-100 px-4 py-2 rounded-full">Admin (invite only)</button>
+</div>
+<input id="name" placeholder="Your name, e.g. Chiaka" class="w-full border rounded-card px-3 py-2" />
+</div>
+
+<div class="bg-white rounded-card shadow p-4 space-y-3">
+<h2 class="font-medium">2. What can you teach? (pick ≥1)</h2>
+<div id="teach" class="flex flex-wrap gap-2 text-sm"></div>
+</div>
+
+<div class="bg-white rounded-card shadow p-4 space-y-3">
+<h2 class="font-medium">3. What do you want to learn? (pick ≥1)</h2>
+<div id="learn" class="flex flex-wrap gap-2 text-sm"></div>
+</div>
+
+<div class="bg-white rounded-card shadow p-4 space-y-3">
+<h2 class="font-medium">4. Your Skill Profile</h2>
+<p id="summary" class="text-sm text-gray-500">Pick teach + learn above to preview.</p>
+<div class="flex gap-2">
+<button id="save" class="bg-trust text-white px-5 py-2 rounded-full text-sm">Save profile</button>
+<a href="match.html" class="bg-gray-100 px-5 py-2 rounded-full text-sm">See matches →</a>
+<a href="admin.html" id="adminLink" class="bg-gray-100 px-5 py-2 rounded-full text-sm">Admin (members see 403) →</a>
+</div>
+<p id="gate" class="text-sm text-red-600 hidden">403 — Members cannot open Admin. Switch to Admin role to preview.</p>
+</div>
+</main>
+<script>
+const skills=['Photography','Excel','Cooking','Coding','Design','Marketing','Music','Fitness','Languages','Video editing'];
+const teachEl=document.getElementById('teach'), learnEl=document.getElementById('learn');
+const teach=new Set(JSON.parse(localStorage.getItem('ss_teach')||'["Sales"]'));
+const learn=new Set(JSON.parse(localStorage.getItem('ss_learn')||'["Photography"]'));
+let role=localStorage.getItem('ss_role')||'member';
+function render(){
+  teachEl.innerHTML=''; learnEl.innerHTML='';
+  skills.forEach(s=>{
+    const b=document.createElement('button'); b.textContent=s;
+    b.className='chip px-3 py-1 rounded-full bg-gray-100'+(teach.has(s)?' on':'');
+    b.onclick=()=>{teach.has(s)?teach.delete(s):teach.add(s);render();}; teachEl.appendChild(b);
+    const c=document.createElement('button'); c.textContent=s;
+    c.className='chip px-3 py-1 rounded-full bg-gray-100'+(learn.has(s)?' on':'');
+    c.onclick=()=>{learn.has(s)?learn.delete(s):learn.add(s);render();}; learnEl.appendChild(c);
+  });
+  document.getElementById('roleMember').classList.toggle('on',role==='member');
+  document.getElementById('roleAdmin').classList.toggle('on',role==='admin');
+  const name=document.getElementById('name').value||localStorage.getItem('ss_name')||'Chiaka';
+  document.getElementById('summary').textContent=`${name} (${role}) — Teaches: ${[...teach].join(', ')||'—'} · Learns: ${[...learn].join(', ')||'—'}`;
+}
+document.getElementById('roleMember').onclick=()=>{role='member';render();};
+document.getElementById('roleAdmin').onclick=()=>{role='admin';render();};
+document.getElementById('save').onclick=()=>{
+  localStorage.setItem('ss_teach',JSON.stringify([...teach]));
+  localStorage.setItem('ss_learn',JSON.stringify([...learn]));
+  localStorage.setItem('ss_role',role);
+  localStorage.setItem('ss_name',document.getElementById('name').value||'Chiaka');
+  alert('Saved in this browser (prototype). Real API: POST /api/profile in Next.js build.');
+  render();
+};
+document.getElementById('adminLink').onclick=(e)=>{
+  if(role!=='admin'){e.preventDefault();document.getElementById('gate').classList.remove('hidden');}
+};
+document.getElementById('name').value=localStorage.getItem('ss_name')||'';
+render();
+</script>
+</body>
+</html>
