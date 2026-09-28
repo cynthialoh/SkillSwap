@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>SkillSwap — Admin</title>
+<title>SkillSwap — Admin (Phase 8)</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <script>tailwind.config={theme:{extend:{colors:{trust:'#2563EB',ink:'#0F172A',muted:'#F8FAFC'},borderRadius:{card:'12px'}}}}</script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -11,18 +11,52 @@
 <body class="bg-muted text-ink">
 <header class="bg-white shadow-sm"><div class="max-w-5xl mx-auto px-4 py-3 flex justify-between">
 <a href="index.html" class="font-bold">🔄 SkillSwap Admin</a>
-<nav class="flex gap-3 text-sm"><a href="index.html">Member view</a></nav>
+<nav class="flex gap-3 text-sm"><a href="index.html">Member view</a><a href="onboarding.html">Role demo</a></nav>
 </div></header>
 <main class="max-w-5xl mx-auto px-4 py-6 space-y-4">
-<h1 class="text-xl font-semibold">Admin dashboard</h1>
+<h1 class="text-xl font-semibold">Admin dashboard <span class="text-sm font-normal text-gray-500">(prototype — actions save in browser, audit below)</span></h1>
 <div class="grid md:grid-cols-4 gap-4 text-sm">
 <div class="bg-white rounded-card shadow p-4"><p class="text-gray-500">Users</p><p class="text-2xl font-bold">1,240</p></div>
-<div class="bg-white rounded-card shadow p-4"><p class="text-gray-500">Pending verifications</p><p class="text-2xl font-bold">6</p></div>
-<div class="bg-white rounded-card shadow p-4"><p class="text-gray-500">Open reports</p><p class="text-2xl font-bold">3</p></div>
+<div class="bg-white rounded-card shadow p-4"><p class="text-gray-500">Pending verifications</p><p id="cVer" class="text-2xl font-bold">2</p></div>
+<div class="bg-white rounded-card shadow p-4"><p class="text-gray-500">Open reports</p><p id="cRep" class="text-2xl font-bold">2</p></div>
 <div class="bg-white rounded-card shadow p-4"><p class="text-gray-500">Completed exchanges</p><p class="text-2xl font-bold">312</p></div>
 </div>
 <div class="grid md:grid-cols-2 gap-4 text-sm">
-<div class="bg-white rounded-card shadow p-4"><p class="font-medium mb-2">Verification queue</p><p>Amara — ID + Cooking cert <button class="text-trust">Approve</button> · <button class="text-red-600">Reject</button></p><p>John — Excel cert <button class="text-trust">Approve</button></p></div>
-<div class="bg-white rounded-card shadow p-4"><p class="font-medium mb-2">Report queue</p><p>Spam message from User#812 <button class="text-trust">Warn</button> · <button class="text-red-600">Ban</button></p><p>Credit dispute: Session #44 <button class="text-trust">Resolve</button></p></div>
+<div class="bg-white rounded-card shadow p-4 space-y-2"><p class="font-medium">Verification queue</p><div id="verQ" class="space-y-1"></div></div>
+<div class="bg-white rounded-card shadow p-4 space-y-2"><p class="font-medium">Report queue</p><div id="repQ" class="space-y-1"></div></div>
+<div class="bg-white rounded-card shadow p-4 space-y-2"><p class="font-medium">Users (suspend / ban)</p><div id="users" class="space-y-1"></div></div>
+<div class="bg-white rounded-card shadow p-4 space-y-2"><p class="font-medium">Categories (add / remove)</p>
+<div class="flex gap-2"><input id="catIn" placeholder="New category" class="flex-1 border rounded-card px-3 py-1" /><button id="catAdd" class="bg-trust text-white px-3 py-1 rounded-full">Add</button></div>
+<div id="cats" class="flex flex-wrap gap-2"></div></div>
+<div class="bg-white rounded-card shadow p-4 space-y-2"><p class="font-medium">Credit dispute (Session #44)</p>
+<div class="flex gap-2"><input id="adjIn" type="number" value="1" class="w-20 border rounded-card px-2 py-1" /><button id="adjGo" class="bg-trust text-white px-3 py-1 rounded-full">Adjust + audit</button></div></div>
+<div class="bg-white rounded-card shadow p-4 space-y-1"><p class="font-medium">Audit log</p><div id="audit" class="space-y-1 text-xs text-gray-600"></div></div>
 </div>
-</main></body></html>
+</main>
+<script>
+let ver=JSON.parse(localStorage.getItem('ad_ver')||'[{"t":"Amara — ID + Cooking cert"},{"t":"John — Excel cert"}]');
+let rep=JSON.parse(localStorage.getItem('ad_rep')||'[{"t":"Spam message from User#812"},{"t":"Credit dispute: Session #44"}]');
+let users=JSON.parse(localStorage.getItem('ad_users')||'[{"n":"User#812","s":"active"},{"n":"Chiaka","s":"active"},{"n":"David","s":"active"}]');
+let cats=JSON.parse(localStorage.getItem('ad_cats')||'["Technology","Business","Creative","Lifestyle","Education","Health & Fitness","Music"]');
+let audit=JSON.parse(localStorage.getItem('ad_audit')||'[]');
+function log(a){audit.unshift(new Date().toLocaleTimeString()+' — '+a);localStorage.setItem('ad_audit',JSON.stringify(audit));render();}
+function render(){
+  document.getElementById('cVer').textContent=ver.length;
+  document.getElementById('cRep').textContent=rep.length;
+  document.getElementById('verQ').innerHTML=ver.map((v,i)=>`<p>${v.t} <button class="text-trust" onclick="mod('ver',${i},'approved')">Approve</button> · <button class="text-red-600" onclick="mod('ver',${i},'rejected')">Reject</button></p>`).join('')||'<p class="text-gray-500">Queue empty ✓</p>';
+  document.getElementById('repQ').innerHTML=rep.map((v,i)=>`<p>${v.t} <button class="text-trust" onclick="mod('rep',${i},'resolved')">Resolve</button> · <button class="text-red-600" onclick="mod('rep',${i},'banned')">Ban user</button></p>`).join('')||'<p class="text-gray-500">Queue empty ✓</p>';
+  document.getElementById('users').innerHTML=users.map((u,i)=>`<p>${u.n} — <b>${u.s}</b> <button class="text-trust" onclick="ust(${i},'suspended')">Suspend</button> · <button class="text-red-600" onclick="ust(${i},'banned')">Ban</button> · <button onclick="ust(${i},'active')">Restore</button></p>`).join('');
+  document.getElementById('cats').innerHTML=cats.map((c,i)=>`<span class="bg-gray-100 px-3 py-1 rounded-full">${c} <button class="text-red-600" onclick="rmc(${i})">×</button></span>`).join('');
+  document.getElementById('audit').innerHTML=audit.map(a=>`<p>${a}</p>`).join('')||'<p class="text-gray-500">No actions yet.</p>';
+  localStorage.setItem('ad_ver',JSON.stringify(ver));localStorage.setItem('ad_rep',JSON.stringify(rep));
+  localStorage.setItem('ad_users',JSON.stringify(users));localStorage.setItem('ad_cats',JSON.stringify(cats));
+}
+window.mod=(q,i,how)=>{const t=(q==='ver'?ver:rep)[i].t;(q==='ver'?ver:rep).splice(i,1);log(`${how}: ${t}`);};
+window.ust=(i,s)=>{users[i].s=s;log(`${users[i].n} → ${s}`);};
+window.rmc=i=>{log(`category removed: ${cats[i]}`);cats.splice(i,1);render();};
+document.getElementById('catAdd').onclick=()=>{const v=document.getElementById('catIn').value.trim();if(!v)return;cats.push(v);document.getElementById('catIn').value='';log('category added: '+v);};
+document.getElementById('adjGo').onclick=()=>{const v=document.getElementById('adjIn').value;log(`credit adjusted Session #44 by ${v} (dispute resolved)`);};
+render();
+</script>
+</body>
+</html>
