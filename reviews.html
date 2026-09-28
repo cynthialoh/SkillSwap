@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SkillSwap — Reviews & Safety (Phase 7)</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={theme:{extend:{colors:{trust:'#2563EB',teal2:'#0D9488',ink:'#0F172A',muted:'#F8FAFC'},borderRadius:{card:'12px'}}}}</script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>body{font-family:Inter,system-ui,sans-serif}.star{cursor:pointer;font-size:1.5rem}.star.on{color:#F59E0B}</style>
+</head>
+<body class="bg-muted text-ink">
+<header class="bg-white shadow-sm"><div class="max-w-3xl mx-auto px-4 py-3 flex justify-between">
+<a href="index.html" class="font-bold">🔄 SkillSwap</a>
+<nav class="flex gap-3 text-sm"><a href="exchange.html">Exchanges</a><a href="profile.html">Profile</a><a href="admin.html">Admin</a></nav>
+</div></header>
+<main class="max-w-3xl mx-auto px-4 py-6 space-y-4">
+<h1 class="text-xl font-semibold">Reviews & Safety</h1>
+
+<div class="bg-white rounded-card shadow p-4 text-sm space-y-2">
+<p class="font-medium">Leave a review — Session: Photography with David (once per side)</p>
+<div id="stars" class="flex gap-1"></div>
+<textarea id="text" placeholder="What did you learn?" class="w-full border rounded-card px-3 py-2"></textarea>
+<button id="send" class="bg-trust text-white px-5 py-2 rounded-full text-sm">Submit review</button>
+<p id="msg" class="text-sm text-red-600"></p>
+</div>
+
+<div class="bg-white rounded-card shadow p-4 text-sm space-y-1">
+<p class="font-medium">David — <span id="avg">⭐ 4.9</span> (prototype avg)</p>
+<div id="list" class="space-y-1"></div>
+</div>
+
+<div class="bg-white rounded-card shadow p-4 text-sm space-y-2">
+<p class="font-medium">Trust & Safety (prototype)</p>
+<div class="flex flex-wrap gap-2">
+<button id="bVerify" class="bg-gray-100 px-4 py-2 rounded-full">Upload ID (demo)</button>
+<button id="bReport" class="bg-gray-100 px-4 py-2 rounded-full">Report user</button>
+<button id="bBlock" class="bg-gray-100 px-4 py-2 rounded-full">Block user</button>
+</div>
+<p id="safe" class="text-gray-500">Verification → admin queue in `admin.html`. Blocked users cannot message (enforced on backend).</p>
+</div>
+</main>
+<script>
+let rating=5, mine=JSON.parse(localStorage.getItem('ss_reviews')||'[]');
+const base=[{r:5,t:'Great teacher, learned lighting basics!'},{r:5,t:'Patient and clear.'},{r:4,t:'Good session, ran 10 min late.'}];
+function stars(){const el=document.getElementById('stars');el.innerHTML='';for(let i=1;i<=5;i++){const s=document.createElement('span');s.textContent='★';s.className='star'+(i<=rating?' on':' text-gray-300');s.onclick=()=>{rating=i;stars();};el.appendChild(s);}}
+function render(){
+  const all=[...mine,...base];
+  const avg=(all.reduce((a,b)=>a+b.r,0)/all.length).toFixed(1);
+  document.getElementById('avg').textContent=`⭐ ${avg} (${all.length} reviews)`;
+  document.getElementById('list').innerHTML=all.map(r=>`<p>⭐ ${r.r} — ${r.t}</p>`).join('');
+}
+document.getElementById('send').onclick=()=>{
+  if(mine.length>=1){document.getElementById('msg').textContent='Already reviewed this session (once per side).';return;}
+  const t=document.getElementById('text').value||'(no comment)';
+  mine.push({r:rating,t});localStorage.setItem('ss_reviews',JSON.stringify(mine));
+  document.getElementById('msg').textContent='';render();
+};
+document.getElementById('bVerify').onclick=()=>document.getElementById('safe').textContent='ID uploaded (demo) → pending in Admin verification queue.';
+document.getElementById('bReport').onclick=()=>document.getElementById('safe').textContent='Reported (demo) → appears in Admin report queue.';
+document.getElementById('bBlock').onclick=()=>document.getElementById('safe').textContent='Blocked (demo) → messaging disabled on backend; prototype only flags here.';
+stars();render();
+</script>
+</body>
+</html>

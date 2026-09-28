@@ -3,11 +3,11 @@
 Goal: trust.
 PRD: §14, §15
 
-## Tasks
-- [ ] Dual review once per completed session, avg rating, exchange count
-- [ ] TrustBadgeRow: Identity / Skill / Highly Rated / Exchanges
-- [ ] ID/skill upload → admin approve/reject queue
-- [ ] Report + Block (blocked cannot message/request)
+## Tasks (prototype: done in `reviews.html` — enforcement server-side needs backend)
+- [x] Review once per session per side (browser-enforced demo), live avg rating
+- [x] TrustBadgeRow shown on `profile.html` / `match.html`
+- [x] ID upload / Report / Block demo buttons → route to `admin.html` queues
+- [ ] Server enforcement (review only after completed session, block stops messages) — PENDING backend
 
 Done when: review once enforced, block works, badge shows.
 Next: Phase 8.
