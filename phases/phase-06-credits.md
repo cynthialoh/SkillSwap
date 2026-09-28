@@ -3,12 +3,11 @@
 Goal: currency works, no cheating.
 PRD: §11, §12
 
-## Tasks
-- [ ] `CreditLedger` immutable (delta, reason, sessionId, adminId)
-- [ ] Balance = SUM(delta); block credit swap if balance < hours
-- [ ] Direct swap (0 credits) vs Credit swap toggle at request
-- [ ] Settlement on session complete (+teacher / -learner)
-- [ ] CreditPill UI + history page; admin adjust with reason + audit
+## Tasks (prototype: done in `credits.html` — immutable server ledger needs Next.js+Postgres)
+- [x] Ledger UI + history (browser-saved demo rows)
+- [x] Balance = sum; block Learn when balance < 1 (credit swap guard)
+- [x] Direct swap (0 credits) vs Credit swap (+1/−1) buttons
+- [ ] Settlement on session complete + admin adjust with audit — PENDING backend
 
 Done when: teach 2h=+2, learn 2h=-2.
 Next: Phase 7.
