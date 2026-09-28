@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>SkillSwap — Browse</title>
+<title>SkillSwap — Browse (Phase 3)</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <script>tailwind.config={theme:{extend:{colors:{trust:'#2563EB',teal2:'#0D9488',ink:'#0F172A',muted:'#F8FAFC'},borderRadius:{card:'12px'}}}}</script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>body{font-family:Inter,system-ui,sans-serif}</style>
+<style>body{font-family:Inter,system-ui,sans-serif}.chip{cursor:pointer}.chip.on{background:#2563EB;color:#fff}</style>
 </head>
 <body class="bg-muted text-ink">
 <header class="bg-white shadow-sm"><div class="max-w-5xl mx-auto px-4 py-3 flex justify-between">
@@ -15,16 +15,52 @@
 </div></header>
 <main class="max-w-5xl mx-auto px-4 py-6 space-y-4">
 <h1 class="text-xl font-semibold">Browse skills & people</h1>
-<input placeholder="Search photography, Excel, cooking…" class="w-full bg-white shadow rounded-card px-4 py-3" />
-<div class="flex gap-2 text-sm">
-<span class="bg-white shadow px-3 py-1 rounded-full">Online</span>
-<span class="bg-white shadow px-3 py-1 rounded-full">In-person</span>
-<span class="bg-white shadow px-3 py-1 rounded-full">⭐ 4.5+</span>
-<span class="bg-white shadow px-3 py-1 rounded-full">✓ Verified</span>
+<input id="q" placeholder="Search photography, Excel, cooking…" class="w-full bg-white shadow rounded-card px-4 py-3" />
+<div class="flex flex-wrap gap-2 text-sm" id="cats"></div>
+<div class="flex flex-wrap gap-2 text-sm">
+<button data-f="mode" data-v="Online" class="chip bg-white shadow px-3 py-1 rounded-full">Online</button>
+<button data-f="mode" data-v="In-person" class="chip bg-white shadow px-3 py-1 rounded-full">In-person</button>
+<button id="fRated" class="chip bg-white shadow px-3 py-1 rounded-full">⭐ 4.5+</button>
+<button id="fVer" class="chip bg-white shadow px-3 py-1 rounded-full">✓ Verified</button>
 </div>
-<div class="grid md:grid-cols-3 gap-4">
-<div class="bg-white rounded-card shadow p-4"><p class="font-medium">Sarah — Photography</p><p class="text-sm text-gray-500">⭐ 4.9 · ✓ Verified · Online</p><a href="match.html" class="text-trust text-sm">View →</a></div>
-<div class="bg-white rounded-card shadow p-4"><p class="font-medium">John — Excel</p><p class="text-sm text-gray-500">⭐ 4.7 · Online + In-person</p><a href="match.html" class="text-trust text-sm">View →</a></div>
-<div class="bg-white rounded-card shadow p-4"><p class="font-medium">Amara — Cooking</p><p class="text-sm text-gray-500">⭐ 4.8 · ✓ Verified</p><a href="match.html" class="text-trust text-sm">View →</a></div>
-</div>
-</main></body></html>
+<p id="count" class="text-sm text-gray-500"></p>
+<div id="grid" class="grid md:grid-cols-3 gap-4"></div>
+</main>
+<script>
+const CATS=['All','Technology','Business','Creative','Lifestyle','Education','Health & Fitness','Music'];
+const PEOPLE=[
+ {n:'Sarah',s:'Photography',c:'Creative',r:4.9,v:1,m:'Online'},
+ {n:'John',s:'Excel',c:'Business',r:4.7,v:0,m:'Online + In-person'},
+ {n:'Amara',s:'Cooking',c:'Lifestyle',r:4.8,v:1,m:'In-person'},
+ {n:'David',s:'Photography',c:'Creative',r:4.9,v:1,m:'Online'},
+ {n:'Chiaka',s:'Sales',c:'Business',r:4.8,v:1,m:'Online'},
+ {n:'Musa',s:'Coding',c:'Technology',r:4.6,v:0,m:'Online'},
+ {n:'Lena',s:'Yoga',c:'Health & Fitness',r:4.9,v:1,m:'In-person'},
+ {n:'Peter',s:'Guitar',c:'Music',r:4.5,v:0,m:'Online'},
+ {n:'Aisha',s:'Languages',c:'Education',r:4.7,v:1,m:'Online'},
+ {n:'Karl',s:'Video editing',c:'Creative',r:4.4,v:0,m:'Online'},
+ {n:'Ngozi',s:'Baking',c:'Lifestyle',r:4.8,v:1,m:'In-person'},
+ {n:'Tunde',s:'AI',c:'Technology',r:4.9,v:1,m:'Online'},
+];
+let cat='All', mode='', rated=false, ver=false;
+const catsEl=document.getElementById('cats'), grid=document.getElementById('grid');
+function renderCats(){catsEl.innerHTML='';CATS.forEach(c=>{const b=document.createElement('button');b.textContent=c;b.className='chip bg-white shadow px-3 py-1 rounded-full'+(cat===c?' on':'');b.onclick=()=>{cat=c;renderCats();render();};catsEl.appendChild(b);});}
+function render(){
+  const q=document.getElementById('q').value.toLowerCase();
+  const list=PEOPLE.filter(p=>
+    (cat==='All'||p.c===cat)&&
+    (!mode||p.m.includes(mode))&&
+    (!rated||p.r>=4.5)&&
+    (!ver||p.v)&&
+    (!q||(p.n+p.s+p.c).toLowerCase().includes(q)));
+  document.getElementById('count').textContent=list.length+' result(s)';
+  grid.innerHTML=list.map(p=>`<div class="bg-white rounded-card shadow p-4"><p class="font-medium">${p.n} — ${p.s}</p><p class="text-sm text-gray-500">⭐ ${p.r} · ${p.v?'✓ Verified · ':''}${p.m} · ${p.c}</p><a href="match.html" class="text-trust text-sm">View →</a></div>`).join('')||'<p class="text-sm text-gray-500">No matches — try another search.</p>';
+}
+document.getElementById('q').oninput=render;
+document.querySelectorAll('[data-f="mode"]').forEach(b=>b.onclick=()=>{mode=mode===b.dataset.v?'':b.dataset.v;document.querySelectorAll('[data-f="mode"]').forEach(x=>x.classList.toggle('on',x.dataset.v===mode));render();});
+document.getElementById('fRated').onclick=e=>{rated=!rated;e.target.classList.toggle('on',rated);render();};
+document.getElementById('fVer').onclick=e=>{ver=!ver;e.target.classList.toggle('on',ver);render();};
+renderCats();render();
+</script>
+</body>
+</html>
