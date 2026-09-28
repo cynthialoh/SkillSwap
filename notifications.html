@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SkillSwap — Notifications (Phase 9)</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={theme:{extend:{colors:{trust:'#2563EB',ink:'#0F172A',muted:'#F8FAFC'},borderRadius:{card:'12px'}}}}</script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>body{font-family:Inter,system-ui,sans-serif}.chip{cursor:pointer}.chip.on{background:#2563EB;color:#fff}</style>
+</head>
+<body class="bg-muted text-ink">
+<header class="bg-white shadow-sm"><div class="max-w-3xl mx-auto px-4 py-3 flex justify-between">
+<a href="index.html" class="font-bold">🔄 SkillSwap</a>
+<nav class="flex gap-3 text-sm"><a href="index.html">Home</a><a href="exchange.html">Exchanges</a><a href="admin.html">Admin</a></nav>
+</div></header>
+<main class="max-w-3xl mx-auto px-4 py-6 space-y-4">
+<div class="flex items-center justify-between">
+<h1 class="text-xl font-semibold">🔔 Notifications <span id="unread" class="text-sm bg-trust text-white px-2 py-0.5 rounded-full"></span></h1>
+<button id="readAll" class="text-sm text-trust">Mark all read</button>
+</div>
+<div class="flex gap-2 text-sm">
+<button data-w="member" class="chip on bg-white shadow px-3 py-1 rounded-full">Member</button>
+<button data-w="admin" class="chip bg-white shadow px-3 py-1 rounded-full">Admin</button>
+</div>
+<div id="list" class="space-y-2"></div>
+<p class="text-xs text-gray-500">Prototype: bell + list only. Real email (Resend) + push + &lt;60s delivery in backend build. Member Home sections live in <a class="text-trust" href="index.html">index.html</a>.</p>
+</main>
+<script>
+let N=JSON.parse(localStorage.getItem('ss_notif')||'null')||[
+ {w:'member',t:'🎯 New match: David (Photography ↔ Sales)',read:0},
+ {w:'member',t:'📩 Swap request accepted by David',read:0},
+ {w:'member',t:'💬 New message from David',read:0},
+ {w:'member',t:'📅 Reminder: exchange Fri 5pm',read:0},
+ {w:'member',t:'🪙 +1 credit earned (taught Sales)',read:0},
+ {w:'member',t:'⭐ Please review your session with David',read:0},
+ {w:'admin',t:'🛡️ New verification request (Amara)',read:0},
+ {w:'admin',t:'🚨 New report: spam (User#812)',read:0},
+ {w:'admin',t:'💳 Credit dispute: Session #44',read:0},
+];
+let w='member';
+function render(){
+  const list=N.filter(n=>n.w===w);
+  const un=list.filter(n=>!n.read).length;
+  document.getElementById('unread').textContent=un?un+' new':'';
+  document.getElementById('list').innerHTML=list.map((n,i)=>`
+    <div class="bg-white rounded-card shadow p-3 text-sm flex gap-3 items-center ${n.read?'opacity-60':''}">
+    <span class="flex-1">${n.t}</span>
+    ${n.read?'':`<button class="text-trust" onclick="read(${N.indexOf(n)})">Mark read</button>`}
+    </div>`).join('')||'<p class="text-sm text-gray-500">All caught up ✓</p>';
+  localStorage.setItem('ss_notif',JSON.stringify(N));
+}
+window.read=i=>{N[i].read=1;render();};
+document.getElementById('readAll').onclick=()=>{N.forEach(n=>{if(n.w===w)n.read=1;});render();};
+document.querySelectorAll('[data-w]').forEach(b=>b.onclick=()=>{w=b.dataset.w;document.querySelectorAll('[data-w]').forEach(x=>x.classList.toggle('on',x===b));render();});
+render();
+</script>
+</body>
+</html>
