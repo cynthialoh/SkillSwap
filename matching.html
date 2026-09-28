@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SkillSwap — Matches (Phase 4)</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={theme:{extend:{colors:{trust:'#2563EB',teal2:'#0D9488',ink:'#0F172A',muted:'#F8FAFC'},borderRadius:{card:'12px'}}}}</script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>body{font-family:Inter,system-ui,sans-serif}</style>
+</head>
+<body class="bg-muted text-ink">
+<header class="bg-white shadow-sm"><div class="max-w-3xl mx-auto px-4 py-3 flex justify-between">
+<a href="index.html" class="font-bold">🔄 SkillSwap</a>
+<nav class="flex gap-3 text-sm"><a href="index.html">Home</a><a href="browse.html">Browse</a><a href="onboarding.html">My skills</a></nav>
+</div></header>
+<main class="max-w-3xl mx-auto px-4 py-6 space-y-4">
+<h1 class="text-xl font-semibold">🎯 Your matches (scored)</h1>
+<p class="text-sm text-gray-500">Scoring: 40 mutual + 20 one-way + 10 same mode + 10 availability + 10 rating≥4.7 + 10 verified. Reads your picks from <a class="text-trust" href="onboarding.html">onboarding</a> if saved.</p>
+<div id="you" class="bg-white rounded-card shadow p-4 text-sm"></div>
+<div id="list" class="space-y-3"></div>
+</main>
+<script>
+const USERS=[
+ {n:'David',teaches:['Photography'],learns:['Sales'],mode:'Online',avail:['Fri eve'],r:4.9,v:1},
+ {n:'Sarah',teaches:['Photography'],learns:['Cooking'],mode:'Online',avail:['Sat'],r:4.9,v:1},
+ {n:'John',teaches:['Excel'],learns:['Photography'],mode:'Online',avail:['Fri eve'],r:4.7,v:0},
+ {n:'Amara',teaches:['Cooking'],learns:['Sales'],mode:'In-person',avail:['Fri eve'],r:4.8,v:1},
+ {n:'Musa',teaches:['Coding'],learns:['Canva'],mode:'Online',avail:['Sun'],r:4.6,v:0},
+ {n:'Aisha',teaches:['Video editing'],learns:['Canva'],mode:'Online',avail:['Fri eve'],r:4.7,v:1},
+];
+const myTeach=new Set(JSON.parse(localStorage.getItem('ss_teach')||'["Sales","Canva"]'));
+const myLearn=new Set(JSON.parse(localStorage.getItem('ss_learn')||'["Photography","Coding"]'));
+const myMode='Online', myAvail=['Fri eve'];
+document.getElementById('you').innerHTML=`<b>You</b> — Teaches: ${[...myTeach].join(', ')} · Learns: ${[...myLearn].join(', ')} · ${myMode} · ${myAvail.join(',')}`;
+function score(u){
+  const aTeachB=[...myTeach].some(s=>u.learns.includes(s));
+  const bTeachA=[...u.teaches].some(s=>myLearn.has(s));
+  let pts=0; const why=[];
+  if(aTeachB&&bTeachA){pts+=40;why.push('Mutual swap +40');}
+  else if(aTeachB||bTeachA){pts+=20;why.push('One-way +20');}
+  if(u.mode===myMode||u.mode.includes(myMode)){pts+=10;why.push('Same mode +10');}
+  if(u.avail.some(a=>myAvail.includes(a))){pts+=10;why.push('Availability +10');}
+  if(u.r>=4.7){pts+=10;why.push(`Rated ${u.r} +10`);}
+  if(u.v){pts+=10;why.push('Verified +10');}
+  const give=[...myTeach].find(s=>u.learns.includes(s)), get=[...u.teaches].find(s=>myLearn.has(s));
+  return{pts,why,give:get?give||'':give,get};
+}
+const ranked=USERS.map(u=>({...u,...score(u)})).sort((a,b)=>b.pts-a.pts);
+document.getElementById('list').innerHTML=ranked.map((u,i)=>`
+<div class="bg-white rounded-card shadow p-4 flex items-center gap-4">
+<div class="w-11 h-11 rounded-full text-white flex items-center justify-center font-bold" style="background:${i===0?'#2563EB':'#0D9488'}">${u.n[0]}</div>
+<div class="flex-1">
+<p class="font-medium">${i===0?'🏆 ':''}${u.n} — ${u.teaches.join(', ')} ↔ ${u.learns.join(', ')} <span class="font-bold">${u.pts} pts</span></p>
+<p class="text-xs text-gray-500">${u.why.join(' · ')||'No overlap'} · ⭐ ${u.r} ${u.v?'· ✓ Verified':''} · ${u.mode}</p>
+${u.give||u.get?`<p class="text-xs mt-1">You teach <b>${u.give||'—'}</b> · You learn <b>${u.get||'—'}</b></p>`:''}
+</div>
+<a href="request.html" class="text-sm px-4 py-2 rounded-full text-white" style="background:#2563EB">Request</a>
+</div>`).join('');
+</script>
+</body>
+</html>
