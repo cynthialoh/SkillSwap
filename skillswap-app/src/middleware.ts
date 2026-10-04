@@ -8,9 +8,17 @@ const isAdminRoute = createRouteMatcher(["/admin(.*)"]);
 export default clerkMiddleware(async (auth, req) => {
   if (!isAdminRoute(req)) return NextResponse.next();
   const { sessionClaims } = await auth();
-  const role = (sessionClaims?.publicMetadata as { role?: string } | undefined)
-    ?.role;
-  if (role !== "admin") {
+  const claims = sessionClaims as
+    | { publicMetadata?: { role?: string }; email?: string }
+    | undefined;
+  const role = claims?.publicMetadata?.role;
+  // Fallback: emails in ADMIN_EMAILS (comma-separated) are admins too.
+  const allowlist = (process.env.ADMIN_EMAILS ?? "")
+    .split(",")
+    .map((e) => e.trim().toLowerCase())
+    .filter(Boolean);
+  const email = claims?.email?.toLowerCase();
+  if (role !== "admin" && !(email && allowlist.includes(email))) {
     return NextResponse.json({ error: "Admins only" }, { status: 403 });
   }
   return NextResponse.next();
