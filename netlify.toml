@@ -1,0 +1,8 @@
+# Netlify build config for SkillSwap (Next.js in skillswap-app/)
+[build]
+  base = "skillswap-app"
+  command = "npm run build"
+  publish = "skillswap-app/.next"
+
+[build.environment]
+  NODE_VERSION = "24"
